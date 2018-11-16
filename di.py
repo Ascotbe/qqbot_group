@@ -3,17 +3,42 @@ from tianqi import *
 import re
 from QGame import *
 import time
-
 from TuLin import *
 bangzhu="""
+/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
 @me  在线基情聊天（关闭了骂人功能)
 @me  -help or --help查看帮助文档
 @me  签到
 @me  查询积分
 @me  翻译功能呢(由于各大翻译网站做了反爬取功能暂时关闭)
+@me  ssr帐号/SSR帐号
+@me  ssr下载/SSR下载
+@me  SSR全部帐号/ssr全部帐号(会刷屏)
 Weather  天气查询 城市
+Master   仅限主人使用开始关闭功能
+/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
 """
 
+SSR_DiZi=""" 
+/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心
+1. Windows客户端：https://github.com/shadowsocksrr/shadowsocksr-csharp/releases                            
+2. Mac客户端：https://github.com/flyzy2005/ss-ssr-clients/raw/master/ssr/SS-X-R.zip                        
+3. Linux客户端：https://github.com/shadowsocks/shadowsocks-qt5/wiki/Installation                           
+4. Android/安卓客户：https://github.com/flyzy2005/ss-ssr-clients/raw/master/ssr/ShadowsocksR-3.4.0.8.apk
+/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心/爱心
+"""
+
+
+
+# SSR列表
+def ssr_work(file_name):
+    ssr_list = []
+    with open(file_name, 'r') as f:
+        for i in f.readlines():
+            ssr_list.append(i)
+    return ssr_list
+
+#天气文件    
 city_file = 'C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\CityCodes.txt'
 with open(city_file) as file_obj:
     city = json.load(file_obj)
@@ -43,8 +68,19 @@ def onQQMessage(bot, contact, member, content):
                 elif '查询' in content[7:9]:  #第三优先级的子集，查询功能
                     InquireIntegral(bot ,contact, member, content)
                     pass 	
-                #if '翻译' in content[7:9]:#第三优先级的子集，翻译功能
-                    #BaiDuFanYi(bot ,contact, member, content)
+                elif 'ssr帐号' in content[7:] or 'SSR帐号' in content[7:]:#第三优先级的子集，ssr帐号功能
+                    ssr_list = ssr_work("C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\ss_ssr.txt")
+                    random.shuffle(ssr_list)  #打乱列表顺序
+                    iRandom = ssr_list[0:1] #取出打乱数据的第一个值
+                    lib_d=" ".join(iRandom)#把列表转换成字符串
+                    bot.SendTo(contact,lib_d)
+                elif 'ssr全部帐号' in content[7:] or 'SSR全部帐号' in content[7:]:#第三优先级的子集，ssr全部帐号功能
+                    ssr_list = ssr_work("C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\ss_ssr.txt")
+                    lib_d=" ".join(ssr_list)#把列表转换成字符串
+                    bot.SendTo(contact,lib_d)
+                     #BaiDuFanYi(bot ,contact, member, content)
+                elif 'SSR下载' in content[7:]  or 'ssr下载' in content[7:]:
+                    bot.SendTo(contact,SSR_DiZi)
                 elif content =='@ME':#第三优先级的子集查看是不是捣乱
                     bot.SendTo(contact,member.name+'你他喵能不能看hlpe??',resendOn1202=False)
                 else :#第三优先级的子集聊天功能
