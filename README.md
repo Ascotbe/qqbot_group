@@ -1,6 +1,7 @@
 # 蕾姆酱
+https://github.com/Ascotbe/Random-img/blob/master/%E6%88%AA%E5%9B%BE.png
 
- 目前机器人只实现功能：
+目前机器人只实现功能：
  
 签到
 
