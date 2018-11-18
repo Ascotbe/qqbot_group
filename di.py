@@ -6,7 +6,7 @@ import time
 from TuLin import *
 from qqbot import qqbotsched
 from ss_pythonic_spider import *
-#from DKScan import *
+from FanYi import *
 from XiaoHua import *
 bangzhu="""
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
@@ -14,11 +14,11 @@ bangzhu="""
 @me  -help or --help查看帮助文档
 @me  签到
 @me  查询积分
-@me  翻译功能呢(由于各大翻译网站做了反爬取功能暂时关闭)
 @me  ssr帐号/SSR帐号
 @me  ssr下载/SSR下载
 @me  SSR全部帐号/ssr全部帐号(会刷屏)
 @me  讲个笑话
+@me  翻译(可以翻译中文和英文)
 Weather  天气查询 城市
 Master   仅限主人使用开始关闭功能
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
@@ -94,6 +94,8 @@ def onQQMessage(bot, contact, member, content):
                      #BaiDuFanYi(bot ,contact, member, content)
                 elif 'SSR下载' in content[7:]  or 'ssr下载' in content[7:]:#第三优先级的子集，提供下载SSR地址
                     bot.SendTo(contact,SSR_DiZi)
+                elif '翻译' in content[7:9]:#第三优先级的子集，翻译功能
+                    FanYiHS(bot, contact, member, content)
                 #elif '扫描' in content[7:9]:#第三优先级的子集，扫描端口功能
                     #DuanKouScan(bot, contact, member, content)
                 elif '讲个笑话' in content[7:]:#第三优先级的子集，讲笑话功能
@@ -104,7 +106,7 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact,XiaoHua_de)
                 elif '钓鱼岛' in content or '台湾' in content or '南海' in content or '南沙群岛' in content:#关键字过滤
                     bot.SendTo(contact,'/爱心永远是中国的,我爱中国~/爱心')
-                elif '习近平'in content or '江泽民'in content or  '胡锦涛' in content or '周恩来' in content or '毛浙东' in content or '邓小平' in content or '刘少奇' in content or '李先念' in content or '杨尚昆' in content or '李克强' in content:#关键字过滤
+                elif '习近平'in content or '江泽民'in content or  '胡锦涛' in content or '周恩来' in content or '毛泽东' in content or '邓小平' in content or '刘少奇' in content or '李先念' in content or '杨尚昆' in content or '李克强' in content:#关键字过滤
                     bot.SendTo(contact,'/爱心心系国家~/爱心')
                 elif '中国' in content or '共产党' in content or '共青团' in content or '中共' in content:#关键字过滤
                     bot.SendTo(contact,'/爱心我的心里只有党/爱心')
@@ -128,7 +130,7 @@ def MasterCommands(bot, contact, member, content):
     '''!-------不反应或者反应-------!'''
     masterFlagFile_name = 'C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\MasterFlag.txt'
     if member != None:
-        if member.uin=='3723903486':#设置好主人uin数字好关闭和开启机器人(好像会每天更新)
+        if member.uin=='517383724':#设置好主人uin数字好关闭和开启机器人(好像会每天更新)
             if content == '退下吧':                               #关闭机器人
                 bot.SendTo(contact, '臣妾告退~')
                 with open(masterFlagFile_name, 'w') as file_obj:
