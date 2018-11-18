@@ -4,6 +4,10 @@ import re
 from QGame import *
 import time
 from TuLin import *
+from qqbot import qqbotsched
+from ss_pythonic_spider import *
+#from DKScan import *
+from XiaoHua import *
 bangzhu="""
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
 @me  在线基情聊天（关闭了骂人功能)
@@ -14,6 +18,7 @@ bangzhu="""
 @me  ssr帐号/SSR帐号
 @me  ssr下载/SSR下载
 @me  SSR全部帐号/ssr全部帐号(会刷屏)
+@me  讲个笑话
 Weather  天气查询 城市
 Master   仅限主人使用开始关闭功能
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
@@ -37,6 +42,14 @@ def ssr_work(file_name):
         for i in f.readlines():
             ssr_list.append(i)
     return ssr_list
+#笑话列表
+def Xiao_work(file_name):#转换成列表
+    XiaoHua_list = []
+    with open(file_name, 'r') as f:
+        for i in f.readlines():
+            XiaoHua_list.append(i)
+    return XiaoHua_list
+
 
 #天气文件    
 city_file = 'C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\CityCodes.txt'
@@ -79,8 +92,25 @@ def onQQMessage(bot, contact, member, content):
                     lib_d=" ".join(ssr_list)#把列表转换成字符串
                     bot.SendTo(contact,lib_d)
                      #BaiDuFanYi(bot ,contact, member, content)
-                elif 'SSR下载' in content[7:]  or 'ssr下载' in content[7:]:
+                elif 'SSR下载' in content[7:]  or 'ssr下载' in content[7:]:#第三优先级的子集，提供下载SSR地址
                     bot.SendTo(contact,SSR_DiZi)
+                #elif '扫描' in content[7:9]:#第三优先级的子集，扫描端口功能
+                    #DuanKouScan(bot, contact, member, content)
+                elif '讲个笑话' in content[7:]:#第三优先级的子集，讲笑话功能
+                    XiaoHua_list=Xiao_work("C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\XiaoHua_ssr.txt")
+                    random.shuffle(XiaoHua_list)
+                    iRandom = XiaoHua_list[0:1] #取出打乱数据的第一个值
+                    XiaoHua_de=" ".join(iRandom)#把列表转换成字符串
+                    bot.SendTo(contact,XiaoHua_de)
+                elif '钓鱼岛' in content or '台湾' in content or '南海' in content or '南沙群岛' in content:#关键字过滤
+                    bot.SendTo(contact,'/爱心永远是中国的,我爱中国~/爱心')
+                elif '习近平'in content or '江泽民'in content or  '胡锦涛' in content or '周恩来' in content or '毛浙东' in content or '邓小平' in content or '刘少奇' in content or '李先念' in content or '杨尚昆' in content or '李克强' in content:#关键字过滤
+                    bot.SendTo(contact,'/爱心心系国家~/爱心')
+                elif '中国' in content or '共产党' in content or '共青团' in content or '中共' in content:#关键字过滤
+                    bot.SendTo(contact,'/爱心我的心里只有党/爱心')
+                elif '更新文件' in content[7:]:#第三优先级子集，更新一些爬取文件，以后爬取功能都可以放在这里
+                    XiaoHua()
+                    bot.SendTo(contact,'陛下吩咐的事情已完成~')
                 elif content =='@ME':#第三优先级的子集查看是不是捣乱
                     bot.SendTo(contact,member.name+'你他喵能不能看hlpe??',resendOn1202=False)
                 else :#第三优先级的子集聊天功能
@@ -98,7 +128,7 @@ def MasterCommands(bot, contact, member, content):
     '''!-------不反应或者反应-------!'''
     masterFlagFile_name = 'C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\MasterFlag.txt'
     if member != None:
-        if member.uin=='1298802985':#设置好主人uin数字好关闭和开启机器人(好像会每天更新)
+        if member.uin=='3723903486':#设置好主人uin数字好关闭和开启机器人(好像会每天更新)
             if content == '退下吧':                               #关闭机器人
                 bot.SendTo(contact, '臣妾告退~')
                 with open(masterFlagFile_name, 'w') as file_obj:
@@ -115,3 +145,12 @@ def MasterCommands(bot, contact, member, content):
         print('已读取', flag)
     return flag
 
+
+@qqbotsched(hour='12,13,14,15,23,0', minute='0')
+def mytask(bot):#单独的定时爬取SSR帐号然后写入功能，需要开VPN
+    Ssr_DinSiPaQu()
+    gl = bot.List('group', 'te1')
+    if gl is not None:
+        for group in gl:
+    #Ssr_DinSiPaQu()
+            bot.SendTo(group, '任务执行完毕')

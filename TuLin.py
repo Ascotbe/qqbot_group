@@ -11,7 +11,7 @@ def answer(ask):
             }
         },
         "userInfo": {
-            "apiKey": "#",
+            "apiKey": "d30c370ced27427fa3424ba7e92e2f03",
             "userId": "263212"
         }
     }
