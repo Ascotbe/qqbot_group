@@ -8,6 +8,7 @@ from qqbot import qqbotsched
 from ss_pythonic_spider import *
 from FanYi import *
 from XiaoHua import *
+from DKScan import *
 bangzhu="""
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
 @me  在线基情聊天（关闭了骂人功能)
@@ -19,6 +20,7 @@ bangzhu="""
 @me  SSR全部帐号/ssr全部帐号(会刷屏)
 @me  讲个笑话
 @me  翻译(可以翻译中文和英文)
+@me  扫描(可以查询多个IP)
 Weather  天气查询 城市
 Master   仅限主人使用开始关闭功能
 /太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳/太阳
@@ -96,8 +98,9 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact,SSR_DiZi)
                 elif '翻译' in content[7:9]:#第三优先级的子集，翻译功能
                     FanYiHS(bot, contact, member, content)
-                #elif '扫描' in content[7:9]:#第三优先级的子集，扫描端口功能
-                    #DuanKouScan(bot, contact, member, content)
+                elif '扫描' in content[7:9]:#第三优先级的子集，扫描端口功能
+                    DuanKouScan(bot, contact, member, content)
+                    time.sleep(100)
                 elif '讲个笑话' in content[7:]:#第三优先级的子集，讲笑话功能
                     XiaoHua_list=Xiao_work("C:\\Users\\Administrator\\.qqbot-tmp\\plugins\\XiaoHua_ssr.txt")
                     random.shuffle(XiaoHua_list)
